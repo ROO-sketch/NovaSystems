@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Academic Alerts</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#0A1A2F; --stroke:#1e2a4a; --txt:#eaf0ff; --muted:#a7b7ff;
+--accent:#6AE4FF; --accent2:#8B5CFF; --shadow:0 18px 60px rgba(0,0,0,.45); --r:22px;
+}
+*{box-sizing:border-box;} body{margin:0;font-family:"Cairo",sans-serif;color:var(--txt);background:var(--bg);overflow-x:hidden}
+
+/* الخلفية المتحركة */
+.bg{position:fixed;inset:0;z-index:-2;overflow:hidden;}
+.grid{position:absolute;inset:-30%;background:linear-gradient(to right, rgba(106,228,255,.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(106,228,255,.08) 1px, transparent 1px);background-size:70px 70px;transform:rotate(12deg);animation:gridMove 15s linear infinite;opacity:.6;}
+.orbs{position:absolute;inset:0;pointer-events:none;}
+.orb{position:absolute;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle at 30% 30%, rgba(106,228,255,.3), transparent 60%);filter:blur(12px);animation:float 12s ease-in-out infinite;opacity:.8;}
+.orb:nth-child(2){width:350px;height:350px;left:65%;top:5%;animation-duration:16s;}
+.orb:nth-child(3){width:250px;height:250px;left:15%;top:70%;animation-duration:14s;}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-30px) translateX(20px) scale(1.05)}}
+@keyframes gridMove{0%{transform:translate3d(0,0,0) rotate(12deg)}100%{transform:translate3d(-140px,100px,0) rotate(12deg)}}
+
+/* الهيدر */
+header{width:min(1100px,92%);margin:30px auto;padding:18px;border:1px solid rgba(30,42,74,.7);border-radius:var(--r);background:rgba(14,19,38,.55);backdrop-filter:blur(10px);box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:12px;}
+.logo{width:46px;height:46px;border-radius:16px;background:linear-gradient(135deg, rgba(106,228,255,.9), rgba(139,92,255,.9));display:grid;place-items:center;font-weight:900;color:#061024;}
+.brand h1{margin:0;font-size:18px;font-weight:800;letter-spacing:.2px;}
+.brand p{margin:0;font-size:12px;color:var(--muted);}
+nav{display:flex;gap:10px;flex-wrap:wrap;}
+.navBtn{border:1px solid rgba(30,42,74,.9);background:rgba(7,10,18,.35);color: var(--txt);padding:10px 14px;border-radius:14px;font-weight:700;font-size:13px;cursor:pointer;transition:.25s;}
+.navBtn:hover{transform:translateY(-2px);border-color:var(--accent);}
+
+/* Main */
+main{width:min(1100px,92%);margin:40px auto;}
+.card{border-radius:var(--r);border:1px solid rgba(30,42,74,.7);background:rgba(14,19,38,.55);backdrop-filter:blur(10px);box-shadow:var(--shadow);padding:25px;margin-bottom:20px;}
+.card h2{margin:0 0 10px;font-size:24px;font-weight:900;}
+.card p{color:var(--muted);line-height:1.7;margin:5px 0;}
+.card ul{margin:0;padding-left:18px;}
+.card .go{display:inline-flex;gap:8px;align-items:center;font-weight:900;color:var(--accent);cursor:pointer;margin-top:10px;}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--accent);}
+
+/* شات */
+#chat{position:fixed;bottom:20px;right:20px;width:300px;max-height:400px;background:rgba(14,19,38,.9);border-radius:22px;border:1px solid var(--stroke);display:flex;flex-direction:column;box-shadow:var(--shadow);font-size:14px;}
+.chat-header{padding:10px;font-weight:700;border-bottom:1px solid var(--stroke);}
+.chat-body{flex:1;overflow-y:auto;padding:10px;}
+#chat-input{border:none;outline:none;padding:8px;border-top:1px solid var(--stroke);background:#0b1225;color:#fff;border-radius:0 0 22px 22px;}
+.user-msg{color:#fff;margin-bottom:6px;}
+.bot-msg{color:var(--accent);margin-bottom:6px;}
+</style>
+</head>
+<body>
+<div class="bg">
+<div class="grid"></div>
+<div class="orbs">
+<div class="orb"></div>
+<div class="orb"></div>
+<div class="orb"></div>
+</div>
+</div>
+
+<header>
+<div class="brand">
+<div class="logo">IT</div>
+<div>
+<h1>تكنولوجيا المعلومات في التعليم الإلكتروني</h1>
+<p>Academic Alerts</p>
+</div>
+</div>
+<nav>
+<button class="navBtn" onclick="window.location='index.html'">الرئيسية</button>
+<button class="navBtn" onclick="window.location='course-roadmap.html'">Course Roadmap</button>
+<button class="navBtn" onclick="window.location='simulation.html'">Simulation</button>
+<button class="navBtn" onclick="window.location='profile.html'">Academic Profile</button>
+</nav>
+</header>
+
+<main>
+<div class="card">
+<h2>تحذيرات أكاديمية ذكية</h2>
+<p>هنا ستظهر التنبيهات الأكاديمية الخاصة بك:</p>
+<ul id="alerts-list">
+<li>تنبيه: مستواك منخفض في مادة البرمجة</li>
+<li>تنبيه: على حافة Probation</li>
+<li>تنبيه: اجتياز مادة قبل بدء التخرج</li>
+</ul>
+<div class="go" onclick="window.location='simulation.html'"><span class="dot"></span> اذهب إلى Simulation</div>
+</div>
+</main>
+
+<div id="chat">
+<div class="chat-header">🗨 شات ذكي</div>
+<div class="chat-body" id="chat-body"></div>
+<input type="text" id="chat-input" placeholder="اكتب رسالتك واضغط Enter">
+</div>
+
+<script>
+const chatBody=document.getElementById("chat-body");
+const chatInput=document.getElementById("chat-input");
+chatInput.addEventListener("keypress",function(e){
+if(e.key==="Enter" && chatInput.value.trim()!==""){
+let msg=chatInput.value.trim();
+chatBody.innerHTML+=`<div class="user-msg">أنت: ${msg}</div>`;
+let reply=`شات ذكي: فهمت "${msg}"`;
+chatBody.innerHTML+=`<div class="bot-msg">${reply}</div>`;
+chatBody.scrollTop=chatBody.scrollHeight;
+chatInput.value="";
+}
+});
+</script>
+</body>
+</html>

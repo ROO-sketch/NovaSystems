@@ -1,0 +1,152 @@
+ <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الدخول للطلاب والمعلمين</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A1A2F; 
+  --card:#0e1326cc;
+  --stroke:#1e2a4a;
+  --txt:#eaf0ff;
+  --muted:#a7b7ff;
+  --accent:#6AE4FF;
+  --shadow: 0 18px 60px rgba(0,0,0,.45);
+  --r:22px;
+}
+
+*{box-sizing:border-box}
+body{margin:0; font-family:"Cairo", sans-serif; color:var(--txt); background:var(--bg); overflow-x:hidden;}
+
+/* ===== الخلفية المتحركة ===== */
+.bg{position:fixed; inset:0; z-index:-2; background: var(--bg);}
+.grid{
+  position:absolute; inset:-30%;
+  background:
+    linear-gradient(to right, rgba(106,228,255,.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(106,228,255,.08) 1px, transparent 1px);
+  background-size: 70px 70px;
+  transform: rotate(12deg);
+  animation: gridMove 15s linear infinite;
+  opacity:.6;
+  filter: blur(.2px);
+}
+.orbs{position:absolute; inset:0; overflow:hidden; pointer-events:none;}
+.orb{
+  position:absolute; width:280px; height:280px; border-radius:50%;
+  background: radial-gradient(circle at 30% 30%, rgba(106,228,255,.3), transparent 60%);
+  filter: blur(12px);
+  animation: float 12s ease-in-out infinite;
+  opacity:.8;
+}
+.orb:nth-child(2){width:350px; height:350px; left:65%; top:5%; background: radial-gradient(circle at 30% 30%, rgba(106,180,255,.25), transparent 60%); animation-duration:16s;}
+.orb:nth-child(3){width:250px; height:250px; left:15%; top:70%; background: radial-gradient(circle at 30% 30%, rgba(106,228,255,.15), transparent 60%); animation-duration:14s;}
+@keyframes float{0%,100%{transform: translateY(0) translateX(0) scale(1)} 50%{transform: translateY(-30px) translateX(20px) scale(1.05)}}
+@keyframes gridMove{0%{transform: translate3d(0,0,0) rotate(12deg)} 100%{transform: translate3d(-140px, 100px, 0) rotate(12deg)}}
+
+/* تصميم الكارت */
+.login-card{
+  width: min(400px,90%);
+  margin: 80px auto 40px;
+  padding: 28px;
+  border-radius: var(--r);
+  border:1px solid rgba(30,42,74,.7);
+  background: rgba(14,19,38,.55);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+}
+.login-card h2{margin:0 0 12px; font-size:24px; font-weight:900;}
+.login-card p{margin:0 0 18px; color:var(--muted);}
+.login-card input{
+  width:100%; margin:8px 0 16px; padding:10px;
+  border-radius:12px; border:1px solid rgba(30,42,74,.7);
+  background: rgba(7,10,18,.35); color:var(--txt);
+  font-size:14px;
+}
+.login-card button{
+  width:100%; padding:12px; border:none; border-radius:16px;
+  background: linear-gradient(135deg, rgba(106,228,255,.95), rgba(139,92,255,.95));
+  color:#071025; font-weight:900; font-size:16px; cursor:pointer;
+  transition:.25s;
+}
+.login-card button:hover{box-shadow:0 18px 50px rgba(139,92,255,.18);}
+.error{color:#ff6b6b; font-weight:700; margin-bottom:12px; text-align:center;}
+
+/* الشات الذكي */
+.chat{
+  position:fixed; bottom:20px; right:20px; width:320px; max-width:90%;
+  height:400px; border-radius:16px; background: rgba(14,19,38,.55);
+  border:1px solid rgba(30,42,74,.7); backdrop-filter: blur(10px);
+  box-shadow: var(--shadow); overflow:hidden; display:flex; flex-direction:column;
+}
+.chat-header{padding:12px; font-weight:900; background: rgba(0,0,0,.15);}
+.chat-messages{flex:1; padding:12px; overflow-y:auto; font-size:13px; color:var(--txt);}
+.chat-input{display:flex; border-top:1px solid rgba(30,42,74,.7);}
+.chat-input input{flex:1; padding:8px; border:none; border-radius:0; background: rgba(7,10,18,.25); color:#fff;}
+.chat-input button{padding:8px; border:none; background:var(--accent); color:#061024; cursor:pointer;}
+</style>
+</head>
+<body>
+<div class="bg">
+  <div class="grid"></div>
+  <div class="orbs">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+</div>
+<div class="login-card">
+  <h2>تسجيل الدخول</h2>
+  <p>للطلبة والمعلمين</p>
+  <div class="error" id="error"></div>
+  <form id="loginForm">
+    <input type="email" id="email" placeholder="البريد الإلكتروني" required>
+    <input type="password" id="password" placeholder="كلمة المرور" required>
+    <button type="submit">تسجيل الدخول</button>
+  </form>
+  <p style="margin-top:12px; font-size:13px;">ليس لديك حساب؟ <a href="#" style="color:var(--accent);">سجل الآن</a></p>
+</div>
+
+<!-- الشات الذكي -->
+<div class="chat">
+  <div class="chat-header">مساعد الطالب 🤖</div>
+  <div class="chat-messages" id="chatMessages">
+    <div>مرحبًا! يمكنك تسجيل الدخول للوصول إلى كل الأدوات الذكية.</div>
+  </div>
+  <div class="chat-input">
+    <input type="text" id="chatInput" placeholder="اكتب رسالتك...">
+    <button onclick="sendMsg()">إرسال</button>
+  </div>
+</div>
+
+<script>
+// محاكاة تسجيل الدخول مباشر بدون قاعدة بيانات
+document.getElementById('loginForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const pass = document.getElementById('password').value;
+  // محاكاة تحقق
+  if(email === "student@example.com" && pass === "12345"){
+    alert("تم تسجيل الدخول بنجاح!");
+    window.location.href = "index.html"; // الصفحة الرئيسية
+  } else {
+    document.getElementById('error').innerText = "البريد أو كلمة المرور خاطئة!";
+  }
+});
+
+// الشات الذكي
+function sendMsg(){
+  let input = document.getElementById("chatInput");
+  let msg = input.value.trim();
+  if(!msg) return;
+  let chat = document.getElementById("chatMessages");
+  chat.innerHTML += "<div>أنت: "+msg+"</div>";
+  chat.innerHTML += "<div>🤖: شكرًا لسؤالك! سيتم الرد قريبًا.</div>";
+  chat.scrollTop = chat.scrollHeight;
+  input.value="";
+}
+</script>
+</body>
+</html>
